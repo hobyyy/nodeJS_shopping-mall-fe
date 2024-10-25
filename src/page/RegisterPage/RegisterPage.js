@@ -29,15 +29,18 @@ const RegisterPage = () => {
       setPasswordError("비밀번호 중복확인이 일치하지 않습니다.");
       return;
     }
-    if (!policy) {
+    if (!policy) {  // 이용약관 동의 안했을 때
       setPolicyError(true);
       return;
     }
     setPasswordError("");
     setPolicyError(false);
+    // api 호출
+    // navigate : 회원가입을 성공하면 login 페이지로 리다이렉트 하기 위해서
     dispatch(registerUser({ name, email, password, navigate }));
   };
 
+  // 입력할 때마다 form의 데이터를 바꾸는 함수
   const handleChange = (event) => {
     event.preventDefault();
     let { id, value, type, checked } = event.target;
