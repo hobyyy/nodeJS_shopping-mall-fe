@@ -11,7 +11,14 @@ const ToastMessage = () => {
     if (toastMessage) {
       const { message, status } = toastMessage;
       if (message !== "" && status !== "") {
-        toast[status](message, { theme: "colored" });
+        console.log('toast',toast);
+        // toast 객체에 존재하는 메서드인지 확인
+        if (typeof toast[status] === "function") {
+          toast[status](message, { theme: "colored" });
+        } else {
+          // 기본 상태를 설정(예: "info")
+          toast.info(message, { theme: "colored" });
+        }
       }
     }
   }, [toastMessage]);
