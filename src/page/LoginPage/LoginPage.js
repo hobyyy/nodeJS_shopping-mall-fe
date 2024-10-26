@@ -23,6 +23,7 @@ const Login = () => {
   }, [navigate]);
   const handleLoginWithEmail = (event) => {
     event.preventDefault();
+    // api에 email, password 던지기
     dispatch(loginWithEmail({ email, password }));
   };
 
@@ -30,6 +31,7 @@ const Login = () => {
     //구글 로그인 하기
   };
 
+  // user값이 있을 때 mainPage로 redirect
   if (user) {
     navigate("/");
   }
