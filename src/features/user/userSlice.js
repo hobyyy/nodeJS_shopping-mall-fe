@@ -9,18 +9,19 @@ export const loginWithEmail = createAsyncThunk(
   "user/loginWithEmail",  // action name
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await api.post('auth/login', {email,password});
       // 성공
       // Loginpage에서 처리
-      return response.data;
-    }catch(error) {
-      console.log('error',error);
-      // 실패
-      // 실패시 생긴 에러값을 reducer에 저장
-      return rejectWithValue(error.error);
+      // token을 세션 스토리지에 저장
+      const response = await api.post('auth/login', { email, password });
+      sessionStorage.setItem('token', response.data.token);
+      return response.data;  // 데이터를 리턴하여 리듀서로 전달
+    } catch (error) {      
+      // 실패 시 에러를 rejectWithValue로 전달
+      return rejectWithValue(error?.message || 'Login failed');
     }
   }
 );
+
 
 export const loginWithGoogle = createAsyncThunk(
   "user/loginWithGoogle",
@@ -56,6 +57,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+// 웹페이지가 켜지자 마자 실행되는 함수
 export const loginWithToken = createAsyncThunk(
   "user/loginWithToken",
   async (_, { rejectWithValue }) => {}
