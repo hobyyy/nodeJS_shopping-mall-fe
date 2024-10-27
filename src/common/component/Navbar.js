@@ -38,7 +38,12 @@ const Navbar = ({ user }) => {
     }
   };
   const handleLogout = () => {
+    // 세션 스토리지에서 토큰 삭제
+    sessionStorage.removeItem('token');
+    // Redux 상태 초기화
     dispatch(logout());
+    // 로그아웃 후 로그인 페이지로 redirect
+    navigate('/login')
   };
   return (
     <div>

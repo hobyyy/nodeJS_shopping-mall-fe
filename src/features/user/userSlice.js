@@ -1,6 +1,5 @@
 // redux toolkit으로 api 호출
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
 import { showToastMessage } from "../common/uiSlice";
 import api from "../../utils/api";
 import { initialCart } from "../cart/cartSlice";
@@ -17,18 +16,20 @@ export const loginWithEmail = createAsyncThunk(
       return response.data;  // 데이터를 리턴하여 리듀서로 전달
     } catch (error) {      
       // 실패 시 에러를 rejectWithValue로 전달
-      return rejectWithValue(error?.message || 'Login failed');
+      return rejectWithValue(error?.error || 'Login failed');
     }
   }
 );
-
 
 export const loginWithGoogle = createAsyncThunk(
   "user/loginWithGoogle",
   async (token, { rejectWithValue }) => {}
 );
 
-export const logout = () => (dispatch) => {};
+export const logout = () => (dispatch) => {
+  // 상태 초기화
+  dispatch(clearUser());
+};
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
@@ -60,7 +61,14 @@ export const registerUser = createAsyncThunk(
 // 웹페이지가 켜지자 마자 실행되는 함수
 export const loginWithToken = createAsyncThunk(
   "user/loginWithToken",
-  async (_, { rejectWithValue }) => {}
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/user/me');
+      return response.data;
+    }catch(error) {
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 const userSlice = createSlice({
@@ -78,7 +86,15 @@ const userSlice = createSlice({
       state.loginError = null;
       state.registrationError = null;
     },
+    clearUser: (state) => {
+      state.user = null;
+      state.loading = false;
+      state.loginError = null;
+      state.registrationError = null;
+      state.success = false;
+    },
   },
+
   // 외부의 함수를 통해서 호출이 될 때 ex)async
   extraReducers: (builder) => {
     builder.addCase(registerUser.pending, (state) => {  // loading 중
@@ -103,7 +119,11 @@ const userSlice = createSlice({
       state.loading = false;
       state.loginError = action.payload;
     })
+    .addCase(loginWithToken.fulfilled, (state,action) => {
+      state.user = action.payload.user;
+    })
   },
 });
-export const { clearErrors } = userSlice.actions;
+
+export const { clearErrors, clearUser } = userSlice.actions;
 export default userSlice.reducer;
