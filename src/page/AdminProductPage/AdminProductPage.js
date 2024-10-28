@@ -23,7 +23,8 @@ const AdminProductPage = () => {
     name: query.get("name") || "",
   }); //검색 조건들을 저장하는 객체
 
-  const [mode, setMode] = useState("new");
+  // newItem을 추가하는 다이얼로그인지 / 기존의 Item을 수정하는 다이얼로그인지 구분값
+  const [mode, setMode] = useState("new");  
 
   const tableHeader = [
     "#",
@@ -49,11 +50,16 @@ const AdminProductPage = () => {
   const openEditForm = (product) => {
     //edit모드로 설정하고
     // 아이템 수정다이얼로그 열어주기
+    setShowDialog('true');
+
   };
 
   const handleClickNewItem = () => {
-    //new 모드로 설정하고
+    // new 모드로 설정하고
+    setMode('new');
     // 다이얼로그 열어주기
+    setShowDialog('true');
+
   };
 
   const handlePageClick = ({ selected }) => {
@@ -104,6 +110,7 @@ const AdminProductPage = () => {
         />
       </Container>
 
+      {/* Dialog */}
       <NewItemDialog
         mode={mode}
         showDialog={showDialog}
