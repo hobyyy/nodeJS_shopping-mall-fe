@@ -57,40 +57,53 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   }, [showDialog]);
 
   const handleClose = () => {
-    //모든걸 초기화시키고;
+    // 모든걸 초기화시키고;
     // 다이얼로그 닫아주기
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //재고를 입력했는지 확인, 아니면 에러
+    // 재고를 입력했는지 확인, 아니면 에러
     // 재고를 배열에서 객체로 바꿔주기
     // [['M',2]] 에서 {M:2}로
     if (mode === "new") {
-      //새 상품 만들기
+      // 새 상품 만들기
     } else {
       // 상품 수정하기
     }
   };
 
   const handleChange = (event) => {
-    //form에 데이터 넣어주기
+    // form에 데이터 넣어주기
+    const {id,value} = event.target;
+    setFormData({...formData, [id]:value});
   };
 
   const addStock = () => {
-    //재고타입 추가시 배열에 새 배열 추가
+    // 재고타입 추가시 배열에 새 배열 추가
+    setStock([...stock,[]])
   };
 
-  const deleteStock = (idx) => {
-    //재고 삭제하기
+  const deleteStock = (index) => {
+    // 재고 삭제하기
+    // console.log('index',index);
+    // const newStock = stock.filter((item,idx) => idx !== index);
+    // setStock(newStock);
+    setStock((prevStock) => prevStock.filter((_, idx) => idx !== index));
   };
 
   const handleSizeChange = (value, index) => {
-    //  재고 사이즈 변환하기
+    // 재고 사이즈 변환하기
+    const newStock = [...stock];
+    newStock[index][0] = value;
+    setStock(newStock);
   };
 
   const handleStockChange = (value, index) => {
-    //재고 수량 변환하기
+    // 재고 수량 변환하기
+    const newStock = [...stock];
+    newStock[index][1] = value;
+    setStock(newStock);
   };
 
   const onHandleCategory = (event) => {
@@ -114,6 +127,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     //이미지 업로드
   };
 
+  // console.log('stock',stock);
   return (
     <Modal show={showDialog} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -176,14 +190,14 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           </Button>
           <div className="mt-2">
             {stock.map((item, index) => (
-              <Row key={index}>
+              <Row key={item.id || index}>
                 <Col sm={4}>
                   <Form.Select
                     onChange={(event) =>
                       handleSizeChange(event.target.value, index)
                     }
                     required
-                    defaultValue={item[0] ? item[0].toLowerCase() : ""}
+                    // defaultValue={item[0] ? item[0].toLowerCase() : ""}
                   >
                     <option value="" disabled selected hidden>
                       Please Choose...
@@ -209,7 +223,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
                     }
                     type="number"
                     placeholder="number of stock"
-                    value={item[1]}
+                    value={item[1] || ''} // item[1]이 undefined 일 때 빈문자열 할당
                     required
                   />
                 </Col>
