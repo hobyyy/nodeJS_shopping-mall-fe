@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Form, Modal, Button, Row, Col, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../../utils/CloudinaryUploadWidget";
@@ -30,10 +31,17 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   );
   const [stock, setStock] = useState([]);
   const dispatch = useDispatch();
-  const [stockError, setStockError] = useState(false);
+  const [stocEmptykError, setStockEmptyError] = useState(false);
+  const [stockNumError, setStockNumError] = useState(false);
+
+  const navigate = useNavigate();
+  // const location = useLocation();
 
   useEffect(() => {
-    if (success) setShowDialog(false);  // 상품 생성을 성공했으므로 dialog 닫기 
+    if (success) {                        // 상품 생성을 성공했으므로
+      setShowDialog(false);               // dialog 닫기 
+      navigate("/admin/product?page=1");  // navigate를 사용해 페이지 이동(작동 안함 : 수정필요)
+    }
   }, [success]);
 
   useEffect(() => {
@@ -58,13 +66,21 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
   const handleClose = () => {
     // 모든걸 초기화시키고;
+    setFormData({ ...InitialFormData });
+    setStock([]);
+    setStockEmptyError(false);
+    setStockNumError(false);
+    if (error) dispatch(clearError());
+  
     // 다이얼로그 닫아주기
+    setShowDialog(false);
   };
-
+  
+  // 상품 생성과 관련된 로직 함수
   const handleSubmit = (event) => {
     event.preventDefault();
     // 재고를 입력했는지 확인, 아니면 에러
-    if(stock.length === 0) return setStockError(true);
+    if(stock.length === 0) return setStockEmptyError(true);
 
     // 재고를 배열에서 객체로 바꿔주기
     // [['S',2], ['M',2]] 에서 {S:3, M:2}로
@@ -89,7 +105,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
   const addStock = () => {
     // 재고타입 추가시 배열에 새 배열 추가
-    setStockError(false);
+    setStockEmptyError(false);
+    setStockNumError(false);
     setStock([...stock,[]]);
   };
 
@@ -194,8 +211,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
         <Form.Group className="mb-3" controlId="stock">
           <Form.Label className="mr-1">Stock</Form.Label>
-          {stockError && (
-            <span className="error-message">재고를 추가해주세요</span>
+          {stocEmptykError && (
+            <span className="error-message">재고를 추가해주세요!</span>
+          )}
+          {stockNumError && (
+            <span className="error-message">양수를 입력해주세요!</span>
           )}
           <Button size="sm" onClick={addStock}>
             Add +
@@ -230,8 +250,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
                 </Col>
                 <Col sm={6}>
                   <Form.Control
-                    onChange={(event) =>
-                      handleStockChange(event.target.value, index)
+                    onChange={(event) => {
+                      const newValue = parseInt(event.target.value);
+                      if(newValue > 0 || event.target.value === '') handleStockChange(event.target.value, index);
+                      else return setStockNumError(true);
+                    }
                     }
                     type="number"
                     placeholder="number of stock"
