@@ -85,7 +85,7 @@ const productSlice = createSlice({
       state.success = false; // 상품 생성을 실패했으므로 dialog 닫지않고 실패메세지 보여주기 
     })
 
-    .addCase(getProductList.pending, (state,action) => {
+    .addCase(getProductList.pending, (state) => {
       state.loading = true;
     })
     .addCase(getProductList.fulfilled, (state,action) => {
@@ -95,7 +95,7 @@ const productSlice = createSlice({
     })
     .addCase(getProductList.rejected, (state,action) => {
       state.loading = false;
-      state.error = action.payload
+      state.error = action.payload;
     })
   },
 });
