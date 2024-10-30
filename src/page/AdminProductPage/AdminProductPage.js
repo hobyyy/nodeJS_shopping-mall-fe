@@ -60,7 +60,7 @@ const AdminProductPage = () => {
       // searchQuery객체를 쿼리형태로 만들어줌
       const params = new URLSearchParams(searchQuery);
       const query = params.toString();
-      // navigate('?' + query);
+      navigate('?' + query);
     }
   }, [searchQuery]);
 
@@ -118,7 +118,7 @@ const AdminProductPage = () => {
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={100}
+          pageCount={totalPageNum}
           forcePage={searchQuery.page - 1}
           previousLabel="< previous"
           renderOnZeroPageCount={null}
