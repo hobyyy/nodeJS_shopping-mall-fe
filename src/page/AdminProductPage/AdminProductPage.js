@@ -70,15 +70,17 @@ const AdminProductPage = () => {
 
   const openEditForm = (product) => {
     // edit모드로 설정하고
+    setMode('edit')
     // 아이템 수정다이얼로그 열어주기
-    setShowDialog('true');
+    dispatch(setSelectedProduct(product))
+    setShowDialog(true);
   };
 
   const handleClickNewItem = () => {
     // new 모드로 설정하고
     setMode('new');
     // 다이얼로그 열어주기
-    setShowDialog('true');
+    setShowDialog(true);
   };
 
   const handlePageClick = ({ selected }) => {

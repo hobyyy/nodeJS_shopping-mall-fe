@@ -93,6 +93,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
       dispatch(createProduct({...formData, stock: totalStock}))
     } else {
       // 상품 수정하기
+      dispatch(editProduct({id:selectedProduct._id , ...formData, stock: totalStock}))
     }
   };
 
@@ -155,7 +156,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
     setFormData({...formData, image : url})
   };
 
-  // console.log('stock',stock);
+  // console.log('stock',stock);  
   return (
     <Modal show={showDialog} onHide={handleClose}>
       <Modal.Header closeButton>
