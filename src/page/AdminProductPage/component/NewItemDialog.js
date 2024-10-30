@@ -224,29 +224,24 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
             {stock.map((item, index) => (
               <Row key={item.id || index}>
                 <Col sm={4}>
-                  <Form.Select
-                    onChange={(event) =>
-                      handleSizeChange(event.target.value, index)
-                    }
-                    required
-                    // defaultValue={item[0] ? item[0].toLowerCase() : ""}
-                  >
-                    <option value="" disabled selected hidden>
-                      Please Choose...
+                <Form.Select
+                  onChange={(event) => handleSizeChange(event.target.value, index)}
+                  required
+                  defaultValue={item[0] ? item[0].toLowerCase() : ""} // 현재 선택된 사이즈를 기본값으로 설정
+                >
+                  <option value="" disabled hidden>
+                    Please Choose...
+                  </option>
+                  {SIZE.map((size, idx) => (
+                    <option
+                      value={size.toLowerCase()}
+                      disabled={stock.some((s) => s[0] === size.toLowerCase() && s !== item)}
+                      key={idx}
+                    >
+                      {size}
                     </option>
-                    {SIZE.map((item, index) => (
-                      <option
-                        inValid={true}
-                        value={item.toLowerCase()}
-                        disabled={stock.some(
-                          (size) => size[0] === item.toLowerCase()
-                        )}
-                        key={index}
-                      >
-                        {item}
-                      </option>
-                    ))}
-                  </Form.Select>
+                  ))}
+                </Form.Select>
                 </Col>
                 <Col sm={6}>
                   <Form.Control
