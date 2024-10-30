@@ -13,7 +13,8 @@ import {
 } from "../../features/product/productSlice";
 
 const AdminProductPage = () => {
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
+  // const navigate = useNavigate();
   const [query] = useSearchParams();
   const dispatch = useDispatch();
   const { productList, totalPageNum } = useSelector((state) => state.product);
@@ -41,6 +42,15 @@ const AdminProductPage = () => {
   useEffect(() => {
     dispatch(getProductList());
   }, [])
+
+  // success 값이 변경될 때마다 페이지를 새로 고침합니다.
+  useEffect(async() => {
+    if (success) {
+      dispatch(getProductList()); // 페이지 새로 고침
+      setSuccess(false); // success 값을 초기화
+    }
+  }, [success]);
+
   useEffect(() => {
     // 검색어나 페이지가 바뀌면 url바꿔주기 (검색어또는 페이지가 바뀜 => url 바꿔줌=> url쿼리 읽어옴=> 이 쿼리값 맞춰서  상품리스트 가져오기)
   }, [searchQuery]);
@@ -53,7 +63,6 @@ const AdminProductPage = () => {
     // edit모드로 설정하고
     // 아이템 수정다이얼로그 열어주기
     setShowDialog('true');
-
   };
 
   const handleClickNewItem = () => {
@@ -116,6 +125,7 @@ const AdminProductPage = () => {
         mode={mode}
         showDialog={showDialog}
         setShowDialog={setShowDialog}
+        setSuccess={setSuccess}
       />
     </div>
   );

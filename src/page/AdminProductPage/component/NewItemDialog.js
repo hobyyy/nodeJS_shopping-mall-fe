@@ -19,10 +19,10 @@ const InitialFormData = {
   description: "",
   category: [],
   status: "active",
-  price: 0,
+  price: "",
 };
 
-const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
+const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
   const { error, success, selectedProduct } = useSelector(
     (state) => state.product
   );
@@ -40,7 +40,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   useEffect(() => {
     if (success) {                        // 상품 생성을 성공했으므로
       setShowDialog(false);               // dialog 닫기 
-      navigate("/admin/product?page=1");  // navigate를 사용해 페이지 이동(작동 안함 : 수정필요)
+      // navigate("/admin/product?page=1");  // navigate를 사용해 페이지 이동(작동 안함 : 수정필요)
+      setSuccess(true);
     }
   }, [success]);
 
@@ -87,8 +88,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     const totalStock = stock.reduce((total,item) => {
       return {...total, [item[0]] : parseInt(item[1])}
     },{})
-    console.log('totalStock',totalStock)
-
     if (mode === "new") {
       // 새 상품 만들기
       dispatch(createProduct({...formData, stock: totalStock}))
