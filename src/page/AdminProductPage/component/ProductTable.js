@@ -40,7 +40,7 @@ const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, search
                       onClick={() => deleteItem(item._id)}
                       className="mr-1"
                     >
-                      -
+                      Del
                     </Button>
                     <Button size="sm" onClick={() => openEditForm(item)}>
                       Edit
