@@ -11,16 +11,18 @@ import { getCartQty } from "../features/cart/cartSlice";
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
-
   const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
     dispatch(loginWithToken());
-  }, []);
+  }, [dispatch]);
+
   useEffect(() => {
     if (user) {
       dispatch(getCartQty());
     }
   }, [user]);
+  
   return (
     <div>
       <ToastMessage />
