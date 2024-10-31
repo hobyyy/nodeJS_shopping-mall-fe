@@ -33,7 +33,6 @@ export const getCartList = createAsyncThunk(
   async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get('/cart');
-      console.log('res',response);
       if(response.status !== 200) throw new Error(response.error);
       else return response.data.data;
     }catch(error) {
@@ -64,12 +63,8 @@ export const updateQty = createAsyncThunk(
   async ({ id, value }, { rejectWithValue }) => {
     try {
       const response = await api.put(`/cart/${id}`,{qty:value});
-      // console.log('res',response);
       if(response.status !== 200) throw new Error(response.error);
-      else {
-        // console.log('resss',response.data.data);
-        return response.data.data;
-      }
+      else return response.data.data;
     } catch (error) {
       return rejectWithValue(error.error);
     }
@@ -78,7 +73,16 @@ export const updateQty = createAsyncThunk(
 
 export const getCartQty = createAsyncThunk(
   "cart/getCartQty",
-  async (_, { rejectWithValue, dispatch }) => {}
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await api.get('/cart/qty');
+      if(response.status !== 200) throw new Error(response.error);
+      else return response.data.qty;
+    } catch (error) {
+      dispatch(showToastMessage(error.error || 'An error occurred', "error"));
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 const cartSlice = createSlice({
@@ -98,7 +102,9 @@ const cartSlice = createSlice({
     .addCase(addToCart.fulfilled, (state,action)=> {
       state.loading = false;
       state.error = '';
-      state.cartItemCount = action.payload.cartItemQty;
+      
+      // 쇼핑백 개수 계산
+      state.cartItemCount = action.payload.data.items.reduce((total,item) => total + item.qty, 0);
     })
     .addCase(addToCart.rejected, (state,action)=> {
       state.loading = false;
@@ -113,7 +119,7 @@ const cartSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.cartList = action.payload;
-      state.cartItemCount = action.payload.cartItemQty;
+      // state.cartItemCount = action.payload.cartItemQty;
       state.totalPrice = action.payload.reduce((total,item) => total + item.productId.price*item.qty, 0);
     })
     .addCase(getCartList.rejected, (state,action)=> {
@@ -129,7 +135,9 @@ const cartSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.cartList = action.payload;
-      state.cartItemCount = action.payload.cartItemQty;
+
+      // totalPrice, 쇼핑백 개수 계산
+      state.cartItemCount = action.payload.reduce((total,item) => total + item.qty, 0);
       state.totalPrice = action.payload.reduce((total,item) => total + item.productId.price*item.qty, 0);
     })
     .addCase(deleteCartItem.rejected, (state,action)=> {
@@ -144,13 +152,31 @@ const cartSlice = createSlice({
     .addCase(updateQty.fulfilled, (state, action) => {  
       state.loading = false;
       state.error = '';
-      state.cartItemCount = action.payload.cartItemQty;
       state.cartList = action.payload;
-
-      // totalPrice 계산
+      
+      // totalPrice, 쇼핑백 개수 계산
+      state.cartItemCount = action.payload.reduce((total,item) => total + item.qty, 0);
       state.totalPrice = state.cartList.reduce((total,item) => total + item.productId.price * item.qty, 0);
     })
     .addCase(updateQty.rejected, (state,action)=> {
+      state.loading = false;
+      state.error = action.payload;
+    })
+
+    .addCase(getCartQty.pending, (state) => {
+      console.log('pending',);
+      state.loading = true;
+      state.error = '';
+    })
+    .addCase(getCartQty.fulfilled, (state, action) => {  
+      console.log('fulfilled',);
+      state.loading = false;
+      state.error = '';
+      console.log('action.payload',action.payload);
+      state.cartItemCount = action.payload;
+    })
+    .addCase(getCartQty.rejected, (state,action)=> {
+      console.log('rejectedd',);
       state.loading = false;
       state.error = action.payload;
     })
