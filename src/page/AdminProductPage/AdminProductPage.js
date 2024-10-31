@@ -46,7 +46,7 @@ const AdminProductPage = () => {
   // success 값이 변경될 때마다 페이지를 새로 고침합니다.
   useEffect(async() => {
     if (success) {
-      dispatch(getProductList()); // 페이지 새로 고침
+      dispatch(getProductList({page: searchQuery.page})); // 페이지 새로 고침
       setSuccess(false); // success 값을 초기화
     }
   }, [success]);

@@ -49,9 +49,13 @@ export const editProduct = createAsyncThunk(
   async ({ id, ...formData }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/product/${id}`, formData)
-      // console.log('response',response);
-      // dispatch(getProductList({page: 1}))
-      return response.data.data
+      // console.log('response', response);
+      if(response.status !== 200) throw new Error(response.error);
+      else {
+        dispatch(showToastMessage({message: '상품 수정 완료!', status: 'success'})) 
+        // dispatch(getProductList({page: 1}))
+        return response.data.data
+      }
     }catch(error) {
       return rejectWithValue(error.error)
     }
@@ -82,13 +86,14 @@ const productSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(createProduct.pending, (state,action) => {
+    builder.addCase(createProduct.pending, (state) => {
       state.loading = true;
     })
-    .addCase(createProduct.fulfilled, (state,action) => {
+    .addCase(createProduct.fulfilled, (state) => {
       state.loading = false;
       state.error = "";
       state.success = true; // 상품 생성을 성공했으므로 dialog 닫기 
+      // state.totalPageNum = action.payload.totalPageNum;
     })
     .addCase(createProduct.rejected, (state,action) => {
       state.loading = false;
@@ -109,18 +114,20 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     })
-    .addCase(editProduct.pending , (state, action) => {
+
+    .addCase(editProduct.pending, (state) => {
       state.loading = true;
     })
-    .addCase(editProduct.fulfilled , (state, action) => {
+    .addCase(editProduct.fulfilled, (state) => {
       state.loading = false;
       state.error = "";
-      state.success = true;
+      state.success = true; // 상품 생성을 성공했으므로 dialog 닫기 
+      // state.totalPageNum = action.payload.totalPageNum;
     })
-    .addCase(editProduct.rejected , (state, action) => {
+    .addCase(editProduct.rejected, (state,action) => {
       state.loading = false;
-      state.error = action.payload;
-      state.success = false;
+      state.error = action.payload
+      state.success = false; // 상품 생성을 실패했으므로 dialog 닫지않고 실패메세지 보여주기 
     })
   },
 });
