@@ -10,6 +10,7 @@ import {
   createProduct,
   editProduct,
 } from "../../../features/product/productSlice";
+import { ignore } from "@cloudinary/url-gen/qualifiers/rotationMode";
 
 const InitialFormData = {
   name: "",
@@ -22,10 +23,11 @@ const InitialFormData = {
   price: "",
 };
 
-const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
+const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => { //
   const { error, success, selectedProduct } = useSelector(
     (state) => state.product
   );
+  // console.log('first success',success)
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : selectedProduct
   );
@@ -38,12 +40,14 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
   // const location = useLocation();
 
   useEffect(() => {
+    // console.log('useEffect success default',success)
     if (success) {                        // 상품 생성을 성공했으므로
+      // console.log('useEffect success')
       setShowDialog(false);               // dialog 닫기 
       // navigate("/admin/product?page=1");  // navigate를 사용해 페이지 이동(작동 안함 : 수정필요)
       setSuccess(true);
     }
-  }, [success]);
+  }, [success, setShowDialog]);//
 
   useEffect(() => {
     if (error || !success) {
@@ -78,7 +82,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
   };
   
   // 상품 생성과 관련된 로직 함수
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     // 재고를 입력했는지 확인, 아니면 에러
     if(stock.length === 0) return setStockEmptyError(true);
@@ -90,10 +94,17 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => {
     },{})
     if (mode === "new") {
       // 새 상품 만들기
-      dispatch(createProduct({...formData, stock: totalStock}))
+      await dispatch(createProduct({...formData, stock: totalStock}))
     } else {
       // 상품 수정하기
-      dispatch(editProduct({id:selectedProduct._id , ...formData, stock: totalStock}))
+      const result = await dispatch(editProduct({id:selectedProduct._id , ...formData, stock: totalStock}));
+      if(result?.meta.requestStatus === 'fulfilled') {
+        console.log('imhere',)
+        setShowDialog(false);
+        setSuccess(true);
+        setStockEmptyError(false);
+        setStockNumError(false);
+      }
     }
   };
 
