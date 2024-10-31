@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { currencyFormat } from "../../../utils/number";
 
-const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, searchQuery }) => {
+const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, searchKeyword }) => {
   return (
     <div className="overflow-x">
       {data.length > 0 ? (
@@ -52,7 +52,7 @@ const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, search
           </Table>
       ) : (
         <div>
-          <h1>"{searchQuery}"에 대한 결과를 찾을 수 없습니다.</h1>
+          <h1>"{searchKeyword}"에 대한 결과를 찾을 수 없습니다.</h1>
           <p>다른 단어를 사용하여 다시 시도하세요.</p>
         </div>
       )}
