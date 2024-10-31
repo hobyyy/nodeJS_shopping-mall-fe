@@ -44,7 +44,19 @@ export const getCartList = createAsyncThunk(
 
 export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
-  async (id, { rejectWithValue, dispatch }) => {}
+  async (id, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await api.delete(`/cart/${id}`);
+      if(response.status !== 200) throw new Error('Failed to delete item');
+      else {
+        dispatch(getCartList());  // 장바구니 목록 업데이트
+        return response.data.data;
+      }
+    } catch (error) {
+      dispatch(showToastMessage({ message: error.error || "카트에서 아이템을 삭제하는데 실패했습니다!", status: "error" }));
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 export const updateQty = createAsyncThunk(
@@ -67,7 +79,7 @@ const cartSlice = createSlice({
     // You can still add reducers here for non-async actions if necessary
   },
   extraReducers: (builder) => {
-    builder.addCase(addToCart.pending, (state,action)=> {
+    builder.addCase(addToCart.pending, (state)=> {
       state.loading = true;
       state.error = '';
     })
@@ -81,7 +93,7 @@ const cartSlice = createSlice({
       state.error = action.payload;
     })
 
-    .addCase(getCartList.pending, (state,action)=> {
+    .addCase(getCartList.pending, (state)=> {
       state.loading = true;
       state.error = '';
     })
@@ -89,9 +101,26 @@ const cartSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.cartList = action.payload;
+      state.cartItemCount = action.payload.cartItemQty;
       state.totalPrice = action.payload.reduce((total,item) => total + item.productId.price*item.qty, 0);
     })
     .addCase(getCartList.rejected, (state,action)=> {
+      state.loading = false;
+      state.error = action.payload;
+    })
+
+    .addCase(deleteCartItem.pending, (state)=> {
+      state.loading = true;
+      state.error = '';
+    })
+    .addCase(deleteCartItem.fulfilled, (state,action)=> {
+      state.loading = false;
+      state.error = '';
+      state.cartList = action.payload;
+      state.cartItemCount = action.payload.cartItemQty;
+      state.totalPrice = action.payload.reduce((total,item) => total + item.productId.price*item.qty, 0);
+    })
+    .addCase(deleteCartItem.rejected, (state,action)=> {
       state.loading = false;
       state.error = action.payload;
     })

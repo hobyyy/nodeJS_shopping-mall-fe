@@ -30,7 +30,7 @@ const OrderReceipt = (data, price ) => {
           <strong>₩ {currencyFormat(data.price)}</strong>
         </div>
       </div>
-      {location.pathname.includes("/cart") && cartList.length > 0 && (
+      {location.pathname.includes("/cart") && data.data.length > 0 && (
         <Button
           variant="dark"
           className="payment-button"
