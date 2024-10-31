@@ -41,7 +41,19 @@ export const createProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
-  async (id, { dispatch, rejectWithValue }) => {}
+  async (id, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/product/${id}`);
+      console.log('res',response);
+      if(response.status !== 200) throw new Error(response.error);
+      else {
+        dispatch(showToastMessage({message: '상품 삭제 완료!', status: 'warning'})); 
+        dispatch(getProductList({page:1}));
+      }
+    }catch(error) {
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 export const editProduct = createAsyncThunk(
@@ -128,6 +140,18 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload
       state.success = false; // 상품 생성을 실패했으므로 dialog 닫지않고 실패메세지 보여주기 
+    })
+
+    .addCase(deleteProduct.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(deleteProduct.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    })
+    .addCase(deleteProduct.rejected, (state,action) => {
+      state.loading = false;
+      state.error = action.payload
     })
   },
 });
