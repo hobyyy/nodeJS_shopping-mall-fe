@@ -1,6 +1,8 @@
 export const currencyFormat = (value) => {
-  const number = value !== undefined ? value : 0;
-  return number.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  const number = !isNaN(value) ? Number(value) : 0; // 숫자로 변환
+  return number
+    .toFixed(0) // 소수점 이하 0자리로 고정
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); // 천 단위마다 점 추가
 };
 
 export const cc_expires_format = (string) => {
