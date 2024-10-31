@@ -10,9 +10,9 @@ import { getCartList } from "../../features/cart/cartSlice";
 const CartPage = () => {
   const dispatch = useDispatch();
   const { cartList, totalPrice } = useSelector((state) => state.cart);
-
   useEffect(() => {
     //카트리스트 불러오기
+    dispatch(getCartList())
   }, []);
 
   return (
@@ -31,7 +31,7 @@ const CartPage = () => {
           )}
         </Col>
         <Col xs={12} md={5}>
-          <OrderReceipt />
+          <OrderReceipt data={cartList} price={totalPrice} />
         </Col>
       </Row>
     </Container>
