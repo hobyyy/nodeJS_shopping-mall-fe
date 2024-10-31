@@ -57,6 +57,7 @@ body{
   padding: 5px;
 }
 .search-box input{
+  width: 100%;
   border:none;
   margin-left:5px;
   background-color: #FAF9F8;

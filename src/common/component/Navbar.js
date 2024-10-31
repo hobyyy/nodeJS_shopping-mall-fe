@@ -33,8 +33,7 @@ const Navbar = ({ user }) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
         return navigate("/");
-      }
-      navigate(`?name=${event.target.value}`);
+      }else navigate(`?name=${event.target.value}`);
     }
   };
   const handleLogout = () => {
