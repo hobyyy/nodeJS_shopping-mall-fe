@@ -1,5 +1,5 @@
 import React from "react";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
@@ -19,15 +19,15 @@ const CartProductCard = ({ item }) => {
   return (
     <div className="product-card-cart">
       <Row>
-        <Col md={2} xs={12}>
+        <Col xl={2} l={3} md={3} xs={3}>
           <img src={item.productId.image} width={112} alt="product" />
         </Col>
-        <Col md={10} xs={12}>
+        <Col xl={10} l={9} md={9} xs={9}>
           <div className="display-flex space-between">
-            <h3>{item.productId.name}</h3>
+            <strong className="mobile-font-size-s">{item.productId.name}</strong>
             <button className="trash-button">
               <FontAwesomeIcon
-                icon={faTrash}
+                icon={faTrashAlt}
                 width={24}
                 onClick={() => deleteCart(item._id)}
               />
@@ -35,31 +35,34 @@ const CartProductCard = ({ item }) => {
           </div>
 
           <div>
-            <strong>₩ {currencyFormat(item.productId.price)}</strong>
+            <strong className="mobile-font-size-s">₩ {currencyFormat(item.productId.price)}</strong>
           </div>
-          <div>Size: {item.size}</div>
-          <div>Total: ₩ {currencyFormat(item.productId.price * item.qty)}</div>
-          <div>
-            Quantity:
-            <Form.Select
-              onChange={(event) =>
-                handleQtyChange(item._id, event.target.value)
-              }
-              required
-              defaultValue={item.qty}
-              className="qty-dropdown"
-            >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
-              <option value={8}>8</option>
-              <option value={9}>9</option>
-              <option value={10}>10</option>
-            </Form.Select>
+          <div className="product-card-cart-info"> 
+            <div>
+              <div className="mobile-font-size-xs">Size: {item.size}</div>
+              <div className="mobile-font-size-xs">Total: ₩ {currencyFormat(item.productId.price * item.qty)}</div>
+            </div>
+            <div>
+              <Form.Select
+                onChange={(event) =>
+                  handleQtyChange(item._id, event.target.value)
+                }
+                required
+                defaultValue={item.qty}
+                className="qty-dropdown"
+              >
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+                <option value={6}>6</option>
+                <option value={7}>7</option>
+                <option value={8}>8</option>
+                <option value={9}>9</option>
+                <option value={10}>10</option>
+              </Form.Select>
+            </div>
           </div>
         </Col>
       </Row>
