@@ -6,20 +6,34 @@ import CartProductCard from "./component/CartProductCard";
 import OrderReceipt from "../PaymentPage/component/OrderReceipt";
 import "./style/cart.style.css";
 import { getCartList } from "../../features/cart/cartSlice";
+import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from 'react-loading-skeleton';
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const { cartList, totalPrice } = useSelector((state) => state.cart);
+  const { cartList, totalPrice, loading } = useSelector((state) => state.cart);
   useEffect(() => {
-    //카트리스트 불러오기
+    // 카트리스트 불러오기
     dispatch(getCartList())
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container>
       <Row>
         <Col xs={12} md={7}>
-          {cartList.length > 0 ? (
+          {loading ? (
+            // Render skeleton loader while loading
+            Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="skeleton-card">
+                <Skeleton height={80} width={80} className="skeleton-thumbnail" />
+                <div className="skeleton-content">
+                  <Skeleton height={12} width="100%" />
+                  <Skeleton height={12} width="100%" />
+                  <Skeleton height={12} width="50%" />
+                </div>
+              </div>
+            ))
+          ) :cartList.length > 0 ? (
             cartList.map((item) => (
               <CartProductCard item={item} key={item._id} />
             ))
@@ -31,7 +45,11 @@ const CartPage = () => {
           )}
         </Col>
         <Col xs={12} md={5}>
-          <OrderReceipt data={cartList} price={totalPrice} />
+          {loading ? (
+            <Skeleton height={460} className="skeleton-order-receipt" />
+          ) : (
+            <OrderReceipt data={cartList} price={totalPrice} />
+          )}
         </Col>
       </Row>
     </Container>
