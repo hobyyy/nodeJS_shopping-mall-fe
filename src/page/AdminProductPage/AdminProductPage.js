@@ -56,12 +56,10 @@ const AdminProductPage = () => {
     // (검색어또는 페이지가 바뀜 => url 바꿔줌=> url쿼리 읽어옴 => 이 쿼리값 맞춰서  상품리스트 가져오기)
     if(searchQuery.name === "") {
       delete searchQuery.name;
-    }else {
-      // searchQuery객체를 쿼리형태로 만들어줌
-      const params = new URLSearchParams(searchQuery);
-      const query = params.toString();
-      navigate('?' + query);
     }
+    const params = new URLSearchParams(searchQuery);
+    const query = params.toString();
+    navigate('?' + query);
   }, [searchQuery]);
 
   const deleteItem = (id) => {

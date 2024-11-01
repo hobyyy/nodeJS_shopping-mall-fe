@@ -10,10 +10,7 @@ const SearchBox = ({ searchQuery, setSearchQuery, placeholder, field }) => {
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
-      if (event.target.value === "") {
-        console.log('here')
-        return navigate('/admin/product?page=1');
-      }else setSearchQuery({ ...searchQuery, page: 1, [field]: event.target.value });
+      setSearchQuery({ ...searchQuery, page: 1, [field]: event.target.value });
     }
   };
   
