@@ -7,6 +7,9 @@ import { currencyFormat } from "../../utils/number";
 import "./style/productDetail.style.css";
 import { getProductDetail } from "../../features/product/productSlice";
 import { addToCart } from "../../features/cart/cartSlice";
+import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from 'react-loading-skeleton';
+
 
 const ProductDetail = () => {
   const dispatch = useDispatch();
@@ -17,7 +20,6 @@ const ProductDetail = () => {
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   
-  // console.log('selectedProduct',selectedProduct);
   const addItemToCart = () => {
     //사이즈를 아직 선택안했다면 에러
     if(size == '') setSizeError(true);
@@ -39,18 +41,24 @@ const ProductDetail = () => {
     dispatch(getProductDetail(id));
   }, [id, dispatch]);
 
-  if (loading || !selectedProduct)
+  if (loading || !selectedProduct) {
     return (
-      <ColorRing
-        visible={true}
-        height="80"
-        width="80"
-        ariaLabel="blocks-loading"
-        wrapperStyle={{}}
-        wrapperClass="blocks-wrapper"
-        colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-      />
+      <Container className="product-detail-card">
+        <Row>
+          <Col sm={6}>
+            <Skeleton height={400} /> {/* 이미지 스켈레톤 */}
+          </Col>
+          <Col className="product-info-area" sm={6}>
+            <Skeleton height={30} count={2} /> {/* 제목과 가격 스켈레톤 */}
+            <Skeleton height={20} count={3} /> {/* 설명 스켈레톤 */}
+            <Skeleton height={40} /> {/* 사이즈 드롭다운 스켈레톤 */}
+            <Skeleton height={40} width={100} /> {/* 추가 버튼 스켈레톤 */}
+          </Col>
+        </Row>
+      </Container>
     );
+  }
+
   return (
     <Container className="product-detail-card">
       <Row>
