@@ -11,8 +11,8 @@ const LandingPage = () => {
   const productList = useSelector((state) => state.product.productList);
   const [query] = useSearchParams();
   const name = query.get("name");
-  // const loading = useSelector((state) => state.product.loading); // 로딩 상태 가져오기
-  const loading = false;
+  const loading = useSelector((state) => state.product.loading); // 로딩 상태 가져오기
+
   useEffect(() => {
     dispatch(
       getProductList({
@@ -20,7 +20,7 @@ const LandingPage = () => {
       })
     );
   }, [name, dispatch]);
-  // console.log('name',name);
+
   return (
     <Container>
       <Row>
