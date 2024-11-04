@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/user/userSlice";
+import { initialCart } from '../../features/cart/cartSlice';
 
 const Navbar = ({ user }) => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const Navbar = ({ user }) => {
     sessionStorage.removeItem('token');
     // Redux 상태 초기화
     dispatch(logout());
+    dispatch(initialCart()); // cartItemCount를 0으로 설정
     // 로그아웃 후 로그인 페이지로 redirect
     navigate('/login')
   };
