@@ -4,16 +4,17 @@ import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
 import { currencyFormat } from "../../../utils/number";
 
-const OrderReceipt = (data, price ) => {
+const OrderReceipt = (data, price) => {
   const location = useLocation();
   const navigate = useNavigate();
-  // console.log('cartList',data);
+  const cartList = data.data? data.data : data.cartList;
+  const totalPrice = data.price? data.price : data.totalPrice;
   return (
     <div className="receipt-container">
       <h3 className="receipt-title">주문 내역</h3>
       <ul className="receipt-list">
-         {data.data.length > 0 && 
-          data.data.map((item,index) => (
+         {cartList.length > 0 && 
+          cartList.map((item,index) => (
             <li key={index}>
               <div className="display-flex space-between">
                 <div>{item.productId.name}</div>
@@ -27,10 +28,10 @@ const OrderReceipt = (data, price ) => {
           <strong>Total:</strong>
         </div>
         <div>
-          <strong>₩ {currencyFormat(data.price)}</strong>
+          <strong>₩ {currencyFormat(totalPrice)}</strong>
         </div>
       </div>
-      {location.pathname.includes("/cart") && data.data.length > 0 && (
+      {location.pathname.includes("/cart") && cartList.length > 0 && (
         <Button
           variant="dark"
           className="payment-button"
