@@ -29,9 +29,18 @@ const PaymentPage = () => {
     zip: "",
   });
   const {cartList, totalPrice} = useSelector(state=>state.cart)
-
+  
   useEffect(() => {
-    // 오더번호를 받으면 어디로 갈까?
+    // useEffect 특성상 rendering될때는 무조건 실행됌
+    // 위의 특성을 막는 로직
+    if(firstLoading) {
+      setFirstLoading(false);
+    }else {
+      // 오더번호를 받으면 어디로 갈까? -> 오더 성공페이지
+      if(orderNum !== '') {
+        navigate('/payment/success');
+      }
+    }
   }, [orderNum]);
 
   const handleSubmit = (event) => {
