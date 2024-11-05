@@ -19,7 +19,7 @@ const OrderStatusCard = ({ orderItem }) => {
             <strong>주문번호: {orderItem.orderNum}</strong>
           </div>
 
-          <div className="text-12">{orderItem.createdAt.slice(0, 10)}</div>
+          <div className="text-12">{orderItem.createdAt?.slice(0, 10)}</div>
 
           <div>
             {orderItem.items[0].productId.name}

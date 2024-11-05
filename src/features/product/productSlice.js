@@ -113,7 +113,6 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = "";
       state.success = true; // 상품 생성을 성공했으므로 dialog 닫기 
-      // state.totalPageNum = action.payload.totalPageNum;
     })
     .addCase(createProduct.rejected, (state,action) => {
       state.loading = false;
@@ -142,7 +141,6 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = "";
       state.success = true; // 상품 생성을 성공했으므로 dialog 닫기 
-      // state.totalPageNum = action.payload.totalPageNum;
     })
     .addCase(editProduct.rejected, (state,action) => {
       state.loading = false;
