@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./style/login.style.css";
 import { loginWithEmail, loginWithGoogle } from "../../features/user/userSlice";
@@ -29,6 +29,12 @@ const Login = () => {
 
   const handleGoogleLogin = async (googleData) => {
     //구글 로그인 하기
+    console.log('googleData',googleData)
+    
+    //credential(암호화된 토큰값) 정보를 벡엔드로 보내기
+    //clientId,
+
+
   };
 
   // user값이 있을 때 mainPage로 redirect
@@ -75,6 +81,14 @@ const Login = () => {
           <div className="text-align-center mt-2">
             <p>-외부 계정으로 로그인하기-</p>
             <div className="display-center">
+              {/* 
+                1. 구글 로그인 버튼 가져옥
+                2. oauth 로그인을 위해서 google api 사이트에 가입하고 클라이언트 key, 시크릿 key 받아오기
+                3. 로그인
+                4. 백엔드에서 로그인하기
+                  a. 이미 로그인 한적이 있는 유저 -> 로그인 시키고 토큰 값 주기
+                  b. 처음 로그인 시도를 하는 유저 -> 유저정보 먼저 새로 생성 -> 로그인 시키고 토큰 값 주기
+              */}
               <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
                 <GoogleLogin
                   onSuccess={handleGoogleLogin}
