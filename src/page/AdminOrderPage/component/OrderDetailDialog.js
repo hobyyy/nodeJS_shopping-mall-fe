@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ORDER_STATUS } from "../../../constants/order.constants";
 import { currencyFormat } from "../../../utils/number";
 import { updateOrder } from "../../../features/order/orderSlice";
+import '../../../page/AdminOrderPage/style/adminOrder.style.css';
 
 const OrderDetailDialog = ({ open, handleClose }) => {
   const selectedOrder = useSelector((state) => state.order.selectedOrder);
@@ -18,6 +19,8 @@ const OrderDetailDialog = ({ open, handleClose }) => {
     handleClose();
   };
 
+  // console.log('selectedOrder',selectedOrder)
+
   if (!selectedOrder) {
     return <></>;
   }
@@ -27,19 +30,22 @@ const OrderDetailDialog = ({ open, handleClose }) => {
         <Modal.Title>Order Detail</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>예약번호: {selectedOrder.orderNum}</p>
-        <p>주문날짜: {selectedOrder.createdAt.slice(0, 10)}</p>
-        <p>이메일: {selectedOrder.userId.email}</p>
-        <p>
-          주소:{selectedOrder.shipTo.address + " " + selectedOrder.shipTo.city}
-        </p>
-        <p>
-          연락처:
-          {`${
-            selectedOrder.contact.firstName + selectedOrder.contact.lastName
-          } ${selectedOrder.contact.contact}`}
-        </p>
-        <p>주문내역</p>
+        <p>예약번호 : {selectedOrder.orderNum}</p>
+        <p>주문날짜 : {selectedOrder.createdAt.slice(0, 10)}</p>
+        <p>이메일 : {selectedOrder.userId.email}</p>
+        {selectedOrder.shipTo && (
+          <p>
+            주소 : {JSON.parse(selectedOrder.shipTo).address + ' ' + JSON.parse(selectedOrder.shipTo).city}
+          </p>
+        )}
+        {selectedOrder.contact && (
+          <p>
+            연락처 : {`${
+              JSON.parse(selectedOrder.contact).firstName + ' ' + JSON.parse(selectedOrder.contact).lastName
+            }`}
+          </p>
+        )}
+        <div>주문내역</div>
         <div className="overflow-x">
           <Table>
             <thead>
@@ -63,7 +69,7 @@ const OrderDetailDialog = ({ open, handleClose }) => {
                   </tr>
                 ))}
               <tr>
-                <td colSpan={4}>총계:</td>
+                <td colSpan={4}>합계 : </td>
                 <td>{currencyFormat(selectedOrder.totalPrice)}</td>
               </tr>
             </tbody>
