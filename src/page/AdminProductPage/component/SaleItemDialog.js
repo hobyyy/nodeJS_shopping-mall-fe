@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-// import { resizeImage } from "../../../utils/resizeImage";
+import { Form, Modal, Button } from "react-bootstrap";
+import { resizeImage } from "../../../utils/resizeImg";
 import { currencyFormat } from "../../../utils/number";
 // import ConfirmModal from "../../../common/component/ConfirmModal";
 import { useDispatch } from "react-redux";
@@ -7,8 +8,9 @@ import {
   getProductList,
   saleProduct,
 } from "../../../features/product/productSlice";
+import '../style/adminProduct.style.css';
 
-function SaleForm({ openSaleForm,  setOpenSaleForm, page, name, handleClose, setSuccess  }) {
+function SaleItemDialog({ openSaleForm,  setOpenSaleForm, page, name, handleClose, setSuccess  }) {
   const dispatch = useDispatch();
   const success = useState(false);
   // const [confirmOption, setConfirmOption] = useState({
@@ -39,7 +41,10 @@ function SaleForm({ openSaleForm,  setOpenSaleForm, page, name, handleClose, set
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-
+    console.log('sale',sale);
+    if(sale===0) {
+      return handleClose();
+    }
     await dispatch(saleProduct({ id: item._id, sale }));
     dispatch(getProductList({ page, name }));
     setOpenSaleForm({ open: false });
@@ -48,29 +53,34 @@ function SaleForm({ openSaleForm,  setOpenSaleForm, page, name, handleClose, set
 
   }
   return (
-    <dialog open={openSaleForm.open} className="sale-dialog">
-      <div className="sale">
+    <Modal show={openSaleForm.open} onHide={handleClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Sale Product</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
         <div className="sale__target">
-          <div className="img-box">
-            {/* <img src={resizeImage(item.image[0].url, 200)} alt={item.name} /> */}
-            <img src={item.image} alt={item.name} />
+          <div className="img-box mb-3">
+            <img
+              src={resizeImage(item.image, 200)}
+              alt={item.name}
+              style={{ maxWidth: "100%", height: "auto" }}
+            />
           </div>
           <div className="sale__property">
-            <div>{item.name}</div>
-            <div>${item.price}</div>
-            <label>
-              Sale:{" "}
-              <input
+            <h5>{item.name}</h5>
+            <p>Price: ${currencyFormat(item.price)}</p>
+            <Form.Group className="mb-3">
+              <Form.Label>Sale Percentage:</Form.Label>
+              <Form.Control
                 type="number"
-                placeholder="0"
                 value={sale}
                 onChange={(e) => setSale(e.target.value)}
+                placeholder="0"
                 max={100}
                 min={0}
                 step={1}
               />
-              %
-            </label>
+            </Form.Group>
             <div>
               Result: ₩
               <strong>
@@ -79,21 +89,17 @@ function SaleForm({ openSaleForm,  setOpenSaleForm, page, name, handleClose, set
             </div>
           </div>
         </div>
-        <div className="sale__btn-box">
-          <button onClick={handleSubmit}>Submit</button>
-          <button onClick={() => setOpenSaleForm({ open: false })}>
-            Close
-          </button>
-        </div>
-      </div>
-      {/* {confirmOption.open && (
-        <ConfirmModal
-          setConfirmOption={setConfirmOption}
-          confirmOption={confirmOption}
-        />
-      )} */}
-    </dialog>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
-export default SaleForm;
+export default SaleItemDialog;

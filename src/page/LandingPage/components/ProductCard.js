@@ -2,18 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { currencyFormat } from "../../../utils/number";
 import Skeleton from "react-loading-skeleton";
+import { resizeImage } from "../../../utils/resizeImg";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const ProductCard = ({ item }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  // 세일 값
-  const sale = item && item.sale ? currencyFormat(1 - item.sale / 100) : 0;
-
-  // Simulating loading time; you can remove or adjust based on your data fetching logic
+  
   useEffect(() => {
-    // Assuming the item prop will be populated soon after
     if (item) {
       setLoading(false);
     }
@@ -21,6 +17,19 @@ const ProductCard = ({ item }) => {
 
   const showProduct = (id) => {
     navigate(`/product/${id}`);
+  };
+
+  const smWidth = 200;
+  const lgWidth = 300;
+  const mobileImg = item?.image ? resizeImage(item.image, smWidth) : '';
+  const desktopImg = item?.image ? resizeImage(item.image, lgWidth) : '';
+  
+  // 이미지 element의 옵션
+  const Img = {
+    src: mobileImg,
+    srcSet: `${mobileImg} ${smWidth}w, ${desktopImg} ${lgWidth}w`,
+    sizes: `(max-width: 400px) ${smWidth}px, ${lgWidth}px`,
+    alt: "img",
   };
 
   return (
@@ -35,11 +44,12 @@ const ProductCard = ({ item }) => {
       ) : (
         <>
           {/* Actual content after loading */}
+          <div className="card__img">
+            {/* <img {...Img} /> */}
+          </div>
           <img src={item?.image} alt={item?.name} />
           <div>{item?.name}</div>
           <div className="card__info__price">
-            {/* ₩ {currencyFormat(item?.price)} */}
-
             <div className={`${item.sale !== 0 && "sale__org-price"}`}>
               ₩ <span>{currencyFormat(item?.price)}</span>
               {item.sale !== 0 && <div className="sale__org-price__line"></div>}
@@ -47,7 +57,7 @@ const ProductCard = ({ item }) => {
             {item.sale !== 0 && (
               <div className="sale__price-box">
                 <div className="sale__price__applied">
-                  $ <span>{currencyFormat(item?.price * sale)}</span>
+                  ₩ <span>{currencyFormat(item?.price * (100 - item.sale) / 100)}</span>
                 </div>
                 <div className="card__info__saled-text">{item.sale}% off</div>
               </div>

@@ -11,7 +11,7 @@ import {
   deleteProduct,
   setSelectedProduct,
 } from "../../features/product/productSlice";
-import SaleForm from './component/SaleForm';
+import SaleItemDialog from './component/SaleItemDialog';
 
 const AdminProductPage = () => {
   const [success, setSuccess] = useState(false);
@@ -90,6 +90,10 @@ const AdminProductPage = () => {
     setSearchQuery({...searchQuery, page: selected + 1})
   };
 
+  const handleClose = () => {
+    setOpenSaleForm(false);
+  };
+
   // searchbox에서 검색어를 읽어온다 
   // =>  엔터를 치면 : onCheckEnter
   // => searchQuery객체가 업데이트 됌
@@ -150,12 +154,12 @@ const AdminProductPage = () => {
         setSuccess={setSuccess}
       />
       {openSaleForm.open && (
-        <SaleForm
+        <SaleItemDialog
           openSaleForm={openSaleForm}
           setOpenSaleForm={setOpenSaleForm}
           page={searchQuery.page}
           name={searchQuery.name}
-          // handleClose={handleClose}
+          handleClose={handleClose}
           setSuccess={setSuccess}
         />
       )}

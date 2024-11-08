@@ -85,7 +85,11 @@ const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, search
                   >
                     Del
                   </Button>
-                  <Button size="sm" onClick={() => openEditForm(item)}>
+                  <Button
+                    size="sm" 
+                    onClick={() => openEditForm(item)}
+                    className="mr-1"
+                  >
                     Edit
                   </Button>
                   <Button size="sm" onClick={() => setOpenSaleForm({ open: true, item })} variant="warning">
