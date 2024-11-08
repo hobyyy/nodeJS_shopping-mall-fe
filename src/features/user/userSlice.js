@@ -23,7 +23,15 @@ export const loginWithEmail = createAsyncThunk(
 
 export const loginWithGoogle = createAsyncThunk(
   "user/loginWithGoogle",
-  async (token, { rejectWithValue }) => {}
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/auth/google', {token});
+      if(response.status !== 200) throw new Error(response.error);
+      return response.data.user;  // 데이터를 리턴하여 리듀서로 전달
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
 );
 
 export const logout = () => (dispatch) => {
@@ -107,6 +115,7 @@ const userSlice = createSlice({
     .addCase(registerUser.rejected, (state,action) => {  // error가 났을 때
       state.registrationError = action.payload
     })
+    
     .addCase(loginWithEmail.pending, (state) => {
       state.loading = true;
     })
@@ -119,6 +128,20 @@ const userSlice = createSlice({
       state.loading = false;
       state.loginError = action.payload;
     })
+
+    .addCase(loginWithGoogle.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(loginWithGoogle.fulfilled, (state,action) => {
+      state.loading = false;
+      state.user = action.payload;
+      state.loginError = null;
+    })
+    .addCase(loginWithGoogle.rejected, (state,action) => {
+      state.loading = false;
+      state.loginError = action.payload;
+    })
+
     .addCase(loginWithToken.fulfilled, (state,action) => {
       state.user = action.payload.user;
     })

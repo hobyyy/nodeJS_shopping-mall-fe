@@ -29,12 +29,8 @@ const Login = () => {
 
   const handleGoogleLogin = async (googleData) => {
     //구글 로그인 하기
-    console.log('googleData',googleData)
-    
     //credential(암호화된 토큰값) 정보를 벡엔드로 보내기
-    //clientId,
-
-
+    dispatch(loginWithGoogle(googleData.credential))
   };
 
   // user값이 있을 때 mainPage로 redirect
