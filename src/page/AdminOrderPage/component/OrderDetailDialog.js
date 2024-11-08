@@ -6,20 +6,23 @@ import { currencyFormat } from "../../../utils/number";
 import { updateOrder } from "../../../features/order/orderSlice";
 import '../../../page/AdminOrderPage/style/adminOrder.style.css';
 
-const OrderDetailDialog = ({ open, handleClose }) => {
+const OrderDetailDialog = ({ open, handleClose, setSuccess }) => {
   const selectedOrder = useSelector((state) => state.order.selectedOrder);
+  const success = useSelector((state) => state.order);
   const [orderStatus, setOrderStatus] = useState(selectedOrder.status);
   const dispatch = useDispatch();
 
   const handleStatusChange = (event) => {
     setOrderStatus(event.target.value);
   };
-  const submitStatus = () => {
-    dispatch(updateOrder({ id: selectedOrder._id, status: orderStatus }));
+
+  const submitStatus = async() => {
+    let res = await dispatch(updateOrder({ id: selectedOrder._id, status: orderStatus }));
+    if(res.status === 200) {
+      setSuccess(true);
+    }
     handleClose();
   };
-
-  // console.log('selectedOrder',selectedOrder)
 
   if (!selectedOrder) {
     return <></>;

@@ -25,7 +25,7 @@ export const createOrder = createAsyncThunk(
       dispatch(initialCart());
       return response.data.orderNum;
     } catch (error) {
-      dispatch(showToastMessage({message: error.error||'주문 생성에 실패했습니다.', status:'fail'}))
+      dispatch(showToastMessage({message: error.message||'주문 생성에 실패했습니다.', status:'fail'}))
       return rejectWithValue(error.error);
     }
   }
@@ -54,10 +54,9 @@ export const getOrderList = createAsyncThunk(
 export const updateOrder = createAsyncThunk(
   "order/updateOrder",
   async ({ id, status }, { dispatch, rejectWithValue }) => {
-
     try {
       const response = await api.put(`/order/${id}`, {status});
-      if(response !== 200) throw new Error(response.error);
+      if(response.status !== 200) throw new Error(response.error);
       // dispatch({})
       console.log('response',response);
 
@@ -65,7 +64,7 @@ export const updateOrder = createAsyncThunk(
       dispatch(getOrderList());
       return response.data.data;
     } catch (error) {
-      dispatch(showToastMessage({message: error.error||'오더 상태 수정에 실패했습니다.', status:'fail'}))
+      dispatch(showToastMessage({message: error.message||'오더 상태 수정에 실패했습니다.', status:'fail'}))
       return rejectWithValue(error.error);
     }
 

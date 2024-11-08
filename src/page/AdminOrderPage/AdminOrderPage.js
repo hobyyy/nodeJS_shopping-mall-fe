@@ -23,6 +23,7 @@ const AdminOrderPage = () => {
   });
   const error = useSelector((state) => state.order.error);
   const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
   const tableHeader = [
     "#",
     "Order#",
@@ -38,6 +39,16 @@ const AdminOrderPage = () => {
     dispatch(getOrderList({ ...searchQuery, url: '/order'}));
     // dispatch(getOrderList({ ...searchQuery }));
   }, [dispatch, searchQuery]);
+
+  // success 값이 변경될 때마다 페이지를 새로 고침합니다.
+  useEffect(async() => {
+    console.log('here1',)
+    if (success) {
+      console.log('here2',)
+      dispatch(getOrderList({page: searchQuery.page})); // 페이지 새로 고침
+      setSuccess(false); // success 값을 초기화
+    }
+  }, [success]);
 
   useEffect(() => {
     if (searchQuery.orderNum === "") {
@@ -102,7 +113,7 @@ const AdminOrderPage = () => {
         />
       </Container>
 
-      {open && <OrderDetailDialog open={open} handleClose={handleClose} />}
+      {open && <OrderDetailDialog open={open} handleClose={handleClose} setSuccess={setSuccess} />}
     </div>
   );
 };
