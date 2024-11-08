@@ -11,6 +11,7 @@ import {
   deleteProduct,
   setSelectedProduct,
 } from "../../features/product/productSlice";
+import SaleForm from './component/SaleForm';
 
 const AdminProductPage = () => {
   const [success, setSuccess] = useState(false);
@@ -26,12 +27,14 @@ const AdminProductPage = () => {
 
   // newItem을 추가하는 다이얼로그인지 / 기존의 Item을 수정하는 다이얼로그인지 구분값
   const [mode, setMode] = useState("new");  
+  const [openSaleForm, setOpenSaleForm] = useState(false);
 
   const tableHeader = [
     "#",
     "Sku",
     "Name",
     "Price",
+    "Sale",
     "Stock",
     "Image",
     "Status",
@@ -114,6 +117,7 @@ const AdminProductPage = () => {
           data={productList}
           deleteItem={deleteItem}
           openEditForm={openEditForm}
+          setOpenSaleForm={setOpenSaleForm}
         />
         <ReactPaginate
           nextLabel="next >"
@@ -145,6 +149,23 @@ const AdminProductPage = () => {
         setShowDialog={setShowDialog}
         setSuccess={setSuccess}
       />
+      {openSaleForm.open && (
+        <SaleForm
+          openSaleForm={openSaleForm}
+          setOpenSaleForm={setOpenSaleForm}
+          page={searchQuery.page}
+          name={searchQuery.name}
+          // handleClose={handleClose}
+          setSuccess={setSuccess}
+        />
+      )}
+
+      {/* {confirmOption.open && (
+        <ConfirmModal
+          setConfirmOption={setConfirmOption}
+          confirmOption={confirmOption}
+        />
+      )} */}
     </div>
   );
 };

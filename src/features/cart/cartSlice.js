@@ -112,7 +112,10 @@ const cartSlice = createSlice({
       state.error = '';
       state.cartList = action.payload;
       // state.cartItemCount = action.payload.cartItemQty;
-      state.totalPrice = action.payload.reduce((total,item) => total + item.productId.price*item.qty, 0);
+      state.totalPrice = action.payload.data.items.reduce((total,item) => {
+        const price = item.productId.price * (1 - item.productId.sale/100);
+        return total + price*item.qty;
+      }, 0);
     })
     .addCase(getCartList.rejected, (state,action)=> {
       state.loading = false;
@@ -130,7 +133,10 @@ const cartSlice = createSlice({
 
       // totalPrice, 쇼핑백 개수 계산
       state.cartItemCount = action.payload.reduce((total,item) => total + item.qty, 0);
-      state.totalPrice = action.payload.reduce((total,item) => total + item.productId.price*item.qty, 0);
+      state.totalPrice = action.payload.data.items.reduce((total,item) => {
+        const price = item.productId.price * (1 - item.productId.sale/100);
+        return total + price*item.qty;
+      }, 0);
     })
     .addCase(deleteCartItem.rejected, (state,action)=> {
       state.loading = false;
@@ -148,7 +154,10 @@ const cartSlice = createSlice({
       
       // totalPrice, 쇼핑백 개수 계산
       state.cartItemCount = action.payload.reduce((total,item) => total + item.qty, 0);
-      state.totalPrice = state.cartList.reduce((total,item) => total + item.productId.price * item.qty, 0);
+      state.totalPrice = action.payload.data.items.reduce((total,item) => {
+        const price = item.productId.price * (1 - item.productId.sale/100);
+        return total + price*item.qty;
+      }, 0);
     })
     .addCase(updateQty.rejected, (state,action)=> {
       state.loading = false;

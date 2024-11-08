@@ -6,7 +6,7 @@ import Skeleton from "react-loading-skeleton"; // Skeleton 임포트
 import "react-loading-skeleton/dist/skeleton.css"; // Skeleton 스타일 임포트
 import { useSelector } from "react-redux"; // useSelector 임포트
 
-const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, searchKeyword }) => {
+const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, searchKeyword, setOpenSaleForm }) => {
   const loading = useSelector((state) => state.product.loading); // Redux store에서 로딩 상태 가져오기
   
   return (
@@ -61,6 +61,11 @@ const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, search
                 <th style={{ minWidth: "100px" }}>{item.name}</th>
                 <th>{currencyFormat(item.price)}</th>
                 <th>
+                    {item.sale !== 0 && (
+                      <div className="product-table__sale">{item.sale}%</div>
+                    )}
+                  </th>
+                <th>
                   {Object.keys(item.stock).map((size, index) => (
                     <div key={index}>
                       {size}: {item.stock[size]}
@@ -82,6 +87,9 @@ const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, search
                   </Button>
                   <Button size="sm" onClick={() => openEditForm(item)}>
                     Edit
+                  </Button>
+                  <Button size="sm" onClick={() => setOpenSaleForm({ open: true, item })} variant="warning">
+                    Sale
                   </Button>
                 </th>
               </tr>

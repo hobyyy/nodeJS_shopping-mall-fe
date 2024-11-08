@@ -7,6 +7,7 @@ import { currencyFormat } from "../../../utils/number";
 import { updateQty, deleteCartItem } from "../../../features/cart/cartSlice";
 const CartProductCard = ({ item }) => {
   const dispatch = useDispatch();
+  const price = item.productId.price * (1 - item.productId.sale / 100);
 
   const handleQtyChange = (id, value) => {
     dispatch(updateQty({ id, value }));
@@ -34,13 +35,34 @@ const CartProductCard = ({ item }) => {
             </button>
           </div>
 
-          <div>
-            <strong className="mobile-font-size-s">₩ {currencyFormat(item.productId.price)}</strong>
+          <div className={`${item.sale !== 0 && "sale__org-price"}`}>
+            $ <span>{currencyFormat(item.productId.price)}</span>
+            {item.productId.sale !== 0 && (
+              <div className="sale__org-price__line"></div>
+            )}
           </div>
+          {/* <div>
+            <strong className="mobile-font-size-s">₩ {currencyFormat(item.productId.price)}</strong>
+          </div> */}
+
+          {item.productId.sale !== 0 && (
+            <div className="sale__price-box">
+              <div className="sale__price__sale">
+                {item.productId.sale}% OFF
+              </div>
+              <div className="sale__price__applied">
+                $<span>{currencyFormat(price)}</span>
+              </div>
+            </div>
+          )}
+
           <div className="product-card-cart-info"> 
             <div>
               <div className="mobile-font-size-xs">Size: {item.size}</div>
-              <div className="mobile-font-size-xs">Total: ₩ {currencyFormat(item.productId.price * item.qty)}</div>
+              <div className="mobile-font-size-xs">
+                {/* Total: ₩ {currencyFormat(item.productId.price * item.qty)} */}
+                Total: $ {currencyFormat(price * item.qty)}
+              </div>
             </div>
             <div>
               <Form.Select

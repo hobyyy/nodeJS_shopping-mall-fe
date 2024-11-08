@@ -200,11 +200,26 @@ body{
   color:black;
   font-weight: bold;
   padding: 20px 10px;
-  list-style-type: none;
-  
-
-  
+  list-style-type: none; 
 }
+
+.sale-dialog {
+  width: 400px;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sale-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+  
 .sidebar-item:hover{
   color:white;
   background-color: red;
@@ -222,6 +237,24 @@ body{
 }
 .mobile-sidebar-toggle{
   display:none;
+}
+
+.sale__org-price__line {
+  background-color: #e04343;
+  height: 0.15rem;
+  left: 0;
+  position: absolute;
+  top: 88%;
+  transform: translateY(-50%);
+  width: 26%;
+}
+
+.card__info__saled-text {
+  color: #e04343;
+  margin-left: auto;
+}
+.product-table__sale {
+  color: red;
 }
 
 

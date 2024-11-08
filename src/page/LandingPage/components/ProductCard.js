@@ -8,6 +8,9 @@ const ProductCard = ({ item }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // 세일 값
+  const sale = item && item.sale ? currencyFormat(1 - item.sale / 100) : 0;
+
   // Simulating loading time; you can remove or adjust based on your data fetching logic
   useEffect(() => {
     // Assuming the item prop will be populated soon after
@@ -34,7 +37,22 @@ const ProductCard = ({ item }) => {
           {/* Actual content after loading */}
           <img src={item?.image} alt={item?.name} />
           <div>{item?.name}</div>
-          <div>₩ {currencyFormat(item?.price)}</div>
+          <div className="card__info__price">
+            {/* ₩ {currencyFormat(item?.price)} */}
+
+            <div className={`${item.sale !== 0 && "sale__org-price"}`}>
+              ₩ <span>{currencyFormat(item?.price)}</span>
+              {item.sale !== 0 && <div className="sale__org-price__line"></div>}
+            </div>
+            {item.sale !== 0 && (
+              <div className="sale__price-box">
+                <div className="sale__price__applied">
+                  $ <span>{currencyFormat(item?.price * sale)}</span>
+                </div>
+                <div className="card__info__saled-text">{item.sale}% off</div>
+              </div>
+            )}
+          </div>   
         </>
       )}
     </div>
