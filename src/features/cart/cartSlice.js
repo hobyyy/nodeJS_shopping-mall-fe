@@ -17,8 +17,7 @@ export const addToCart = createAsyncThunk(
   async ({ id, size }, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.post('/cart',{productId: id, size, qty:1});  // qty :몇개 살건지
-      if(response.status !== 200) throw new Error(response.error);
-      else dispatch(showToastMessage({message: '카트에 아이템을 추가했습니다!', status: 'success'}));
+      dispatch(showToastMessage({message: '카트에 아이템을 추가했습니다!', status: 'success'}));
       return response.data; // TODO
     }catch(error) {
       dispatch(showToastMessage({message: error.error, status: 'error'}));
@@ -32,8 +31,7 @@ export const getCartList = createAsyncThunk(
   async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get('/cart');
-      if(response.status !== 200) throw new Error(response.error);
-      else return response.data.data;
+      return response.data.data;
     }catch(error) {
       return rejectWithValue(error.error);
     }
@@ -45,11 +43,8 @@ export const deleteCartItem = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.delete(`/cart/${id}`);
-      if(response.status !== 200) throw new Error('Failed to delete item');
-      else {
-        dispatch(getCartList());  // 장바구니 목록 업데이트
-        return response.data.data;
-      }
+      dispatch(getCartList());  // 장바구니 목록 업데이트
+      return response.data.data;
     } catch (error) {
       dispatch(showToastMessage({ message: error.error || "카트에서 아이템을 삭제하는데 실패했습니다!", status: "error" }));
       return rejectWithValue(error.error);
@@ -62,8 +57,7 @@ export const updateQty = createAsyncThunk(
   async ({ id, value }, { rejectWithValue }) => {
     try {
       const response = await api.put(`/cart/${id}`,{qty:value});
-      if(response.status !== 200) throw new Error(response.error);
-      else return response.data.data;
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.error);
     }
@@ -75,8 +69,7 @@ export const getCartQty = createAsyncThunk(
   async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get('/cart/qty');
-      if(response.status !== 200) throw new Error(response.error);
-      else return response.data.qty;
+      return response.data.qty;
     } catch (error) {
       dispatch(showToastMessage({message: error, status: 'error'}));
       return rejectWithValue(error.error);
