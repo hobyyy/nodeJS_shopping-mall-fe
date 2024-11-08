@@ -21,7 +21,6 @@ export const addToCart = createAsyncThunk(
       else dispatch(showToastMessage({message: '카트에 아이템을 추가했습니다!', status: 'success'}));
       return response.data; // TODO
     }catch(error) {
-      console.log('error',error);
       dispatch(showToastMessage({message: error.error, status: 'error'}));
       return rejectWithValue(error.error);
     }
@@ -164,19 +163,15 @@ const cartSlice = createSlice({
     })
 
     .addCase(getCartQty.pending, (state) => {
-      console.log('pending',);
       state.loading = true;
       state.error = '';
     })
     .addCase(getCartQty.fulfilled, (state, action) => {  
-      console.log('fulfilled',);
       state.loading = false;
       state.error = '';
-      console.log('action.payload',action.payload);
       state.cartItemCount = action.payload;
     })
     .addCase(getCartQty.rejected, (state,action)=> {
-      console.log('rejectedd',);
       state.loading = false;
       state.error = action.payload;
     })

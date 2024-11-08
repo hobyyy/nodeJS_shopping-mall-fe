@@ -25,7 +25,6 @@ const ProductDetail = () => {
     if(size == '') setSizeError(true);
 
     // 아직 로그인을 안한유저라면 로그인페이지로
-    console.log('user',user);
     if(!user) navigate('/login')
 
     // 카트에 아이템 추가하기

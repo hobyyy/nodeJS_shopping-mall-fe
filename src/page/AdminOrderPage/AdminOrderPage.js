@@ -42,9 +42,7 @@ const AdminOrderPage = () => {
 
   // success 값이 변경될 때마다 페이지를 새로 고침합니다.
   useEffect(async() => {
-    console.log('here1',)
     if (success) {
-      console.log('here2',)
       dispatch(getOrderList({page: searchQuery.page})); // 페이지 새로 고침
       setSuccess(false); // success 값을 초기화
     }

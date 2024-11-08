@@ -99,7 +99,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, setSuccess}) => { //
       // 상품 수정하기
       const result = await dispatch(editProduct({id:selectedProduct._id , ...formData, stock: totalStock}));
       if(result?.meta.requestStatus === 'fulfilled') {
-        console.log('imhere',)
         setShowDialog(false);
         setSuccess(true);
         setStockEmptyError(false);

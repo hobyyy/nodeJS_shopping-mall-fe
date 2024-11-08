@@ -52,7 +52,6 @@ export const deleteProduct = createAsyncThunk(
   async (id, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.delete(`/product/${id}`);
-      console.log('res',response);
       if(response.status !== 200) throw new Error(response.error);
       else {
         dispatch(showToastMessage({message: '상품 삭제 완료!', status: 'warning'})); 
@@ -166,7 +165,6 @@ const productSlice = createSlice({
     .addCase(getProductDetail.fulfilled, (state,action) => {
       state.loading = false;
       state.error = "";
-      console.log('selectedProduct.payload',action.payload);
       state.selectedProduct = action.payload;
     })
     .addCase(getProductDetail.rejected, (state,action) => {

@@ -10,7 +10,7 @@ const ToastMessage = () => {
     if (toastMessage) {
       const { message, status } = toastMessage;
       if (message !== "" && status !== "") {
-        console.log('toast',toast);
+        // console.log('toast',toast);
         // toast 객체에 존재하는 메서드인지 확인
         if (typeof toast[status] === "function") {
           toast[status](message, { theme: "colored" });

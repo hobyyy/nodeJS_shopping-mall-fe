@@ -40,8 +40,6 @@ export const getOrderList = createAsyncThunk(
   "order/getOrderList",
   async ({ url, ...query }, { rejectWithValue, dispatch }) => {
     try {
-      console.log('url', url)
-      console.log(`${url}`)
       const response = await api.get(`${url}`,{params: {...query}});
       if(response.status !== 200) throw new Error(response.error);
       return response.data;

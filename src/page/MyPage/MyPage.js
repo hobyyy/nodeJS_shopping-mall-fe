@@ -18,8 +18,6 @@ const MyPage = () => {
     orderNum: query.get("orderNum") || ""
   }); 
 
-  console.log('searchQuery', searchQuery);
-
   useEffect(() => {
     dispatch(getOrderList({ ...searchQuery, url: '/order/me'}));
   }, [dispatch, query, searchQuery]);
