@@ -36,32 +36,28 @@ const CartProductCard = ({ item }) => {
           </div>
 
           <div className={`${item.sale !== 0 && "sale__org-price"}`}>
-            $ <span>{currencyFormat(item.productId.price)}</span>
+            ₩ <span>{currencyFormat(item.productId.price)}</span>
             {item.productId.sale !== 0 && (
-              <div className="sale__org-price__line"></div>
+              <div className="sale__org-price__line-cart"></div>
+            )}
+            {item.productId.sale !== 0 && (
+              <>
+                <div className="slaed-text">
+                  {item.productId.sale}% OFF
+                </div>
+                <div className="sale__price__applied">
+                  ₩ <span>{currencyFormat(price)}</span>
+                </div>
+              </>
             )}
           </div>
-          {/* <div>
-            <strong className="mobile-font-size-s">₩ {currencyFormat(item.productId.price)}</strong>
-          </div> */}
-
-          {item.productId.sale !== 0 && (
-            <div className="sale__price-box">
-              <div className="sale__price__sale">
-                {item.productId.sale}% OFF
-              </div>
-              <div className="sale__price__applied">
-                $<span>{currencyFormat(price)}</span>
-              </div>
-            </div>
-          )}
 
           <div className="product-card-cart-info"> 
             <div>
               <div className="mobile-font-size-xs">Size: {item.size}</div>
               <div className="mobile-font-size-xs">
                 {/* Total: ₩ {currencyFormat(item.productId.price * item.qty)} */}
-                Total: $ {currencyFormat(price * item.qty)}
+                Total: ₩ {currencyFormat(price * item.qty)}
               </div>
             </div>
             <div>

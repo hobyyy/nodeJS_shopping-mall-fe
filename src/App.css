@@ -248,13 +248,33 @@ body{
   transform: translateY(-50%);
   width: 26%;
 }
-
-.card__info__saled-text {
-  color: #e04343;
-  margin-left: auto;
+.sale__org-price__line-cart {
+  background-color: #e04343;
+  height: 0.15rem;
+  left: 202px;
+  position: absolute;
+  top: 48%;
+  transform: translateY(2%);
+  width: 6%;
 }
-.product-table__sale {
+
+.slaed-text {
+  color: #e04343;
+}
+.sale__price__applied {
+  font-weight: bold;
+}
+.sale-tag {
+  color: white;
+  background-color: #e04343;
+  border: 1px solid #e04343;
+  width: 40px;
+  text-align: center;
+  font-weight: bold;
+}
+.slaed-text-total {
   color: red;
+  margin-left: 10px;
 }
 
 

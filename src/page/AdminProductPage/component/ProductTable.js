@@ -62,7 +62,7 @@ const ProductTable = ({ header = [], data = [], deleteItem, openEditForm, search
                 <th>{currencyFormat(item.price)}</th>
                 <th>
                     {item.sale !== 0 && (
-                      <div className="product-table__sale">{item.sale}%</div>
+                      <div className="slaed-text">{item.sale}%</div>
                     )}
                   </th>
                 <th>

@@ -59,7 +59,7 @@ const ProductCard = ({ item }) => {
                 <div className="sale__price__applied">
                   ₩ <span>{currencyFormat(item?.price * (100 - item.sale) / 100)}</span>
                 </div>
-                <div className="card__info__saled-text">{item.sale}% off</div>
+                <div className="slaed-text">{item.sale}% off</div>
               </div>
             )}
           </div>   
