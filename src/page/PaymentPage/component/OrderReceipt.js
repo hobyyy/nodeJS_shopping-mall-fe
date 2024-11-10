@@ -9,7 +9,7 @@ const OrderReceipt = (data, price) => {
   const navigate = useNavigate();
   const cartList = data.data? data.data : data.cartList;
   const totalPrice = data.price? data.price : data.totalPrice;
-  
+  console.log('cartlist',cartList);
   return (
     <div className="receipt-container">
       <h3 className="receipt-title">주문 내역</h3>
@@ -18,7 +18,7 @@ const OrderReceipt = (data, price) => {
           cartList.map((item,index) => (
             <li key={index}>
               <div className="display-flex space-between">
-                <div>{item.productId.name}</div>
+                <div>{item.productId.name} - {item.size} - {item.qty}개</div>
                 <div className="display-flex">                  
                   {item.productId.sale? (
                     <>
