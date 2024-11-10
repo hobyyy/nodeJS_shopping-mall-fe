@@ -154,7 +154,7 @@ const cartSlice = createSlice({
       
       // totalPrice, 쇼핑백 개수 계산
       state.cartItemCount = action.payload.reduce((total,item) => total + item.qty, 0);
-      state.totalPrice = action.payload.data.items.reduce((total,item) => {
+      state.totalPrice = action.payload.reduce((total,item) => {
         const price = item.productId.price * (1 - item.productId.sale/100);
         return total + price*item.qty;
       }, 0);
