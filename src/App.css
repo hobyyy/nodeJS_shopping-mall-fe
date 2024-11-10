@@ -251,11 +251,8 @@ body{
 .sale__org-price__line-cart {
   background-color: #e04343;
   height: 0.15rem;
-  left: 202px;
-  position: absolute;
-  top: 48%;
-  transform: translateY(2%);
-  width: 6%;
+  width: 14%;
+  transform: translate(-2px, -15px);
 }
 
 .slaed-text {
