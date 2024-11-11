@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -7,8 +7,7 @@ import {
   faSearch,
   faShoppingBag,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/user/userSlice";
 import { initialCart } from '../../features/cart/cartSlice';
@@ -17,7 +16,9 @@ const Navbar = ({ user }) => {
   const dispatch = useDispatch();
   const { cartItemCount } = useSelector((state) => state.cart);
   const isMobile = window.navigator.userAgent.indexOf("Mobile") !== -1;
-  const [showSearchBox, setShowSearchBox] = useState(false);
+  const [showSearchBox, setShowSearchBox] = useState(false);  
+  const location = useLocation(); // 현재 페이지 경로 확인을 위해 사용
+  const [keyword, setKeyword] = useState(""); // 검색어 상태 추가
   const menuList = [
     "여성",
     "Divided",
@@ -32,13 +33,26 @@ const Navbar = ({ user }) => {
   let navigate = useNavigate();
   // console.log('cartItemCount',cartItemCount);
 
+  useEffect(() => {
+    // 페이지 이동 시 검색어 초기화
+    setKeyword("");
+  }, [location.pathname]); // 경로가 바뀔 때마다 실행
+
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
-        return navigate("/");
-      }else navigate(`?name=${event.target.value}`);
+        // return navigate("/");
+        return navigate(window.location.pathname);
+      } else {
+        const searchParam = window.location.pathname.includes("/order/me")
+        ? `?orderNum=${event.target.value}` // 주문번호 검색 쿼리
+        : `?name=${event.target.value}`;    // 제품명 검색 쿼리
+        navigate(searchParam);
+        setKeyword(""); // 페이지 이동 후 검색어 초기화
+      }
     }
   };
+
   const handleLogout = () => {
     // 세션 스토리지에서 토큰 삭제
     sessionStorage.removeItem('token');
@@ -48,6 +62,11 @@ const Navbar = ({ user }) => {
     // 로그아웃 후 로그인 페이지로 redirect
     navigate('/login')
   };
+
+  const searchPlaceholder = window.location.pathname.includes("/order/me")
+  ? "주문번호 검색"
+  : "제품이름 검색";
+
   return (
     <div>
       {showSearchBox && (
@@ -57,8 +76,10 @@ const Navbar = ({ user }) => {
               <FontAwesomeIcon className="search-icon" icon={faSearch} />
               <input
                 type="text"
-                placeholder="제품검색"
+                placeholder={searchPlaceholder}
                 onKeyPress={onCheckEnter}
+                value={keyword} // 검색어 상태 바인딩
+                onChange={(e) => setKeyword(e.target.value)} // 검색어 업데이트
               />
             </div>
             <button
@@ -115,7 +136,7 @@ const Navbar = ({ user }) => {
               )}
             </div>
             <div
-              onClick={() => navigate("/account/purchase")}
+              onClick={() => navigate("/order/me")}
               className="nav-icon"
             >
               <FontAwesomeIcon icon={faBox} />
@@ -148,8 +169,10 @@ const Navbar = ({ user }) => {
             <FontAwesomeIcon icon={faSearch} />
             <input
               type="text"
-              placeholder="제품검색"
+              placeholder={searchPlaceholder}
               onKeyPress={onCheckEnter}
+              value={keyword} // 검색어 상태 바인딩
+              onChange={(e) => setKeyword(e.target.value)} // 검색어 업데이트
             />
           </div>
         )}

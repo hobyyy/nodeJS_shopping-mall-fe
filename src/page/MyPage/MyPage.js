@@ -19,6 +19,8 @@ const MyPage = () => {
   }); 
 
   useEffect(() => {
+    const orderNum = query.get("orderNum");
+    searchQuery.orderNum = orderNum;
     dispatch(getOrderList({ ...searchQuery, url: '/order/me'}));
   }, [dispatch, query, searchQuery]);
 
@@ -38,7 +40,8 @@ const MyPage = () => {
     setSearchQuery({...searchQuery, page: selected + 1})
   };
 
-  if (orderList?.length === 0) {
+  // console.log('orderList',orderList)
+  if (!orderList || orderList.length === 0) {
     return (
       <Container className="no-order-box">
         <div>진행중인 주문이 없습니다.</div>

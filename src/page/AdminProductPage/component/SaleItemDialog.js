@@ -41,7 +41,6 @@ function SaleItemDialog({ openSaleForm,  setOpenSaleForm, page, name, handleClos
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log('sale',sale);
     if(sale===0) {
       return handleClose();
     }

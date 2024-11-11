@@ -38,7 +38,7 @@ const AdminOrderPage = () => {
   useEffect(() => {
     dispatch(getOrderList({ ...searchQuery, url: '/order'}));
     // dispatch(getOrderList({ ...searchQuery }));
-  }, [dispatch, searchQuery]);
+  }, [dispatch, query, searchQuery]);
 
   // success 값이 변경될 때마다 페이지를 새로 고침합니다.
   useEffect(async() => {
@@ -78,7 +78,7 @@ const AdminOrderPage = () => {
           <SearchBox
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            placeholder="오더번호"
+            placeholder="주문번호 검색"
             field="orderNum"
           />
         </div>

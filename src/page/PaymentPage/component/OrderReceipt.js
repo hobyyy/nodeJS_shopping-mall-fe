@@ -9,7 +9,8 @@ const OrderReceipt = (data, price) => {
   const navigate = useNavigate();
   const cartList = data.data? data.data : data.cartList;
   const totalPrice = data.price? data.price : data.totalPrice;
-  console.log('cartlist',cartList);
+  // console.log('cartlist',cartList);
+  
   return (
     <div className="receipt-container">
       <h3 className="receipt-title">주문 내역</h3>

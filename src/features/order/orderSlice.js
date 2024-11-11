@@ -40,6 +40,7 @@ export const getOrderList = createAsyncThunk(
   async ({ url, ...query }, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get(`${url}`,{params: {...query}});
+      // console.log('response',response)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -93,6 +94,7 @@ const orderSlice = createSlice({
     .addCase(getOrderList.fulfilled, (state,action) => {
       state.loading = false;
       state.error = '';
+      // console.log('action.payload',action.payload)
       state.orderList = action.payload.data;
       state.totalPageNum = action.payload.totalPageNum;
     })
